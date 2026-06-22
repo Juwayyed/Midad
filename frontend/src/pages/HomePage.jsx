@@ -1,5 +1,56 @@
+import { useEffect, useState } from "react";
+import NavBar from "../components/NavBar";
+import MemoCard from "../components/MemoCard";
+import RateLimitedUI from "../components/RateLimitedUI";
+import axios from "axios";
+import toast from "react-hot-toast";
+
 const HomePage = () => {
-  return <div>HomePage</div>;
+  const [isRateLimited, setIsRateLimited] = useState(false);
+  const [memos, setMemos] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMemos = async () => {
+      try {
+        const res = await axios.get("http://localhost:4001/api/memos");
+        console.log(res.data);
+        setMemos(res.data);
+        setIsRateLimited(false);
+      } catch (error) {
+        console.error("Error fetching memos!", error);
+        if (error.response?.status === 429) {
+          setIsRateLimited(true);
+        } else {
+          toast.error("Failed to load memos!");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMemos();
+  }, []);
+
+  return (
+    <div className="min-h-screen">
+      <NavBar />
+      {/* If isRateLimited = True, render that component */}
+      {isRateLimited && <RateLimitedUI />}
+      <div className="max-w-7xl mx-auto mt-6 p-4">
+        {loading && (
+          <div className="text-center text-primary py-10">Loading Memos...</div>
+        )}
+        {memos.length > 0 && !isRateLimited && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {memos.map((memo) => (
+              <MemoCard key={memo._id} memo={memo} />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default HomePage;
