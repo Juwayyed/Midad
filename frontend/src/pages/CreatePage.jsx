@@ -1,16 +1,19 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { ArrowLeftIcon } from "lucide-react";
 import toast from "react-hot-toast";
-import axios from "axios";
+import api from "../lib/axios";
 
 const CreatePage = () => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!title.trim() || !content.trim()) {
       toast.error("Fill in the required fields!");
       return;
@@ -19,13 +22,21 @@ const CreatePage = () => {
     setLoading(true);
 
     try {
-      await axios.post("http://localhost:4001/api/memos", {
+      await api.post("/memos", {
         title,
         content,
       });
       toast.success("Memo Created Successfully!");
+      navigate("/");
     } catch (error) {
-      console.error("Error happened", error);
+      if (error.response?.status === 429) {
+        toast.error("You are creating too many requests", {
+          duration: 4000, //4000ms = 4 seconds
+          icon: "💀",
+        });
+      } else {
+        toast.error("Failed To Create Memo!");
+      }
     } finally {
       setLoading(false);
     }

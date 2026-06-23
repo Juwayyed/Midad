@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import MemoCard from "../components/MemoCard";
 import RateLimitedUI from "../components/RateLimitedUI";
-import axios from "axios";
 import toast from "react-hot-toast";
+import api from "../lib/axios";
 
 const HomePage = () => {
   const [isRateLimited, setIsRateLimited] = useState(false);
@@ -13,7 +13,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchMemos = async () => {
       try {
-        const res = await axios.get("http://localhost:4001/api/memos");
+        const res = await api.get("/memos");
         console.log(res.data);
         setMemos(res.data);
         setIsRateLimited(false);
