@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import MemoCard from "../components/MemoCard";
 import RateLimitedUI from "../components/RateLimitedUI";
+import NoMemos from "../components/NoMemos";
 import toast from "react-hot-toast";
 import api from "../lib/axios";
 
@@ -14,7 +15,7 @@ const HomePage = () => {
     const fetchMemos = async () => {
       try {
         const res = await api.get("/memos");
-        console.log(res.data);
+        //console.log(res.data);
         setMemos(res.data);
         setIsRateLimited(false);
       } catch (error) {
@@ -41,10 +42,13 @@ const HomePage = () => {
         {loading && (
           <div className="text-center text-primary py-10">Loading Memos...</div>
         )}
+
+        {memos.length === 0 && !isRateLimited && <NoMemos />}
+
         {memos.length > 0 && !isRateLimited && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {memos.map((memo) => (
-              <MemoCard key={memo._id} memo={memo} />
+              <MemoCard key={memo._id} memo={memo} setMemos={setMemos} />
             ))}
           </div>
         )}
