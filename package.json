@@ -4,5 +4,25 @@
   },
   "dependencies": {
     "dotenv": "^17.4.2"
-  }
+  },
+  "name": "midad",
+  "version": "1.0.0",
+  "description": "Midad",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Juwayyed/Midad.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Juwayyed/Midad/issues"
+  },
+  "homepage": "https://github.com/Juwayyed/Midad#readme"
 }
