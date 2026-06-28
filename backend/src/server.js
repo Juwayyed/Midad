@@ -26,11 +26,11 @@ app.use(rateLimiter);
 app.use("/api/memos", memoRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.use(express.static(path.join(__dirname, "frontend/dist")));
 
   app.get("*", (request, response) => {
     response.sendFile(
-      path.join(__dirname, "../frontend", "dist", "index.html"),
+      path.join(__dirname, "frontend/dist/index.html"),
     );
   });
 }
