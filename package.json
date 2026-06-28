@@ -9,7 +9,7 @@
     "client": "npm --prefix frontend run dev",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start": "node backend/src/server.js",
-    "build": "npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "dependencies": {
     "@upstash/ratelimit": "^2.0.8",
